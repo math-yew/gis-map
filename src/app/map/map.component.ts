@@ -2,6 +2,7 @@ import { Component, Input, OnInit, ViewChild, ElementRef, OnChanges, SimpleChang
 import Map from '@arcgis/core/map';
 import MapView from '@arcgis/core/views/MapView';
 import WebMap from '@arcgis/core/WebMap';
+import MapImageLayer from '@arcgis/core/layers/MapImageLayer';
 
 interface City {
   name: string,
@@ -34,6 +35,13 @@ export class MapComponent implements OnInit, OnChanges {
     var map = new Map({
       basemap: "streets-navigation-vector"
     });
+
+    const oilSandLayerProperties = {
+      url: 'https://sampleserver6.arcgisonline.com/arcgis/rest/services/OilSandsProjectBoundaries/MapServer',
+      sublayers: [{id: 1}]
+    };
+    const oilSandsLayer = new MapImageLayer(oilSandLayerProperties);
+    map.add(oilSandsLayer);
 
     // Create a new MapView instance
     this.view = new MapView({
