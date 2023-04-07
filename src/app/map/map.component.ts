@@ -1,7 +1,12 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, Input, OnInit, ViewChild, ElementRef, OnChanges, SimpleChanges } from '@angular/core';
 import Map from '@arcgis/core/map';
 import MapView from '@arcgis/core/views/MapView';
 import WebMap from '@arcgis/core/WebMap';
+
+interface City {
+  name: string,
+  coord: [number, number]
+}
 
 @Component({
   selector: 'app-map',
@@ -9,10 +14,14 @@ import WebMap from '@arcgis/core/WebMap';
   styleUrls: ['./map.component.css']
 })
 
-export class MapComponent implements OnInit {
+export class MapComponent implements OnInit, OnChanges {
   @ViewChild('mapViewNode', { static: true }) private mapViewEl!: ElementRef;
 
+  private view!: MapView;
+
   constructor() { }
+
+  @Input() city: City = { name: 'Pocatello', coord:[-112.4455, 42.8713] };
 
   ngOnInit(): void {
     // Create a new WebMap instance
@@ -27,11 +36,27 @@ export class MapComponent implements OnInit {
     });
 
     // Create a new MapView instance
-    const mapView = new MapView({
+    this.view = new MapView({
       container: this.mapViewEl.nativeElement,
       map: map,
-      center: [-112.443, 42.871],
-      zoom: 12
+      center: this.city.coord,
+      zoom: 11
     });
   }
+
+
+
+  ngOnChanges(changes: SimpleChanges): void {
+    // if (changes.city) {
+      const { currentValue } = changes["city"];
+      console.log("View");
+      // console.log(this.view);
+      // console.log(view);
+      // console.log(currentValue);
+      this.view.center = currentValue.coord;
+
+    // }
+  }
+
+
 }

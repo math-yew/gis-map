@@ -1,0 +1,11 @@
+<div *ngIf="city">
+    <p>City: {{city.name}}</p>
+    <p>Coord: {{city.coord}}</p>
+    <p>Oby: {{city | json}}</p>
+</div>
+
+<label for="city-select">Select a city:</label>
+<select id="city-select" [(ngModel)]="city" (ngModelChange)="updateCity()">
+    <option *ngFor="let c of cities" [ngValue]="c">{{c.name}}</option>
+</select>
+  
